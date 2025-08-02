@@ -1,9 +1,56 @@
+# -------------------------------------------------------
+
+# 🔐 SECURITY RULES
+
+# -------------------------------------------------------
+
+# 1. Disable directory listing
+
+Options -Indexes
+
+# 2. Prevent access to .env file
+
 <Files ".env">
 Order allow,deny
 Deny from all
 </Files>
 
-<Files "config.php">
+# 3. Prevent access to PHP config, logs, and backups
+
+<FilesMatch "\.(bak|ini|log|sql|sh|swp|conf|yaml|yml)$">
 Order allow,deny
 Deny from all
-</Files>
+</FilesMatch>
+
+# 4. Deny direct access to sensitive directories
+
+RedirectMatch 403 ^/config/
+RedirectMatch 403 ^/controllers/
+RedirectMatch 403 ^/models/
+RedirectMatch 403 ^/views/
+
+# 5. Prevent access to specific critical PHP files
+
+<FilesMatch "^(config\.php|FileModel\.php|FileController\.php)$">
+Order allow,deny
+Deny from all
+</FilesMatch>
+
+# 6. Disable access to Git or version control files (if present)
+
+<FilesMatch "^(\.git|\.svn|\.hg)">
+Order allow,deny
+Deny from all
+</FilesMatch>
+
+# 7. Protect against browser MIME-type sniffing
+
+Header set X-Content-Type-Options "nosniff"
+
+# 8. Prevent clickjacking
+
+Header always set X-Frame-Options "DENY"
+
+# 9. Disable server signature
+
+ServerSignature Off
