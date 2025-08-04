@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/middleware/CorsMiddleware.php';
+CorsMiddleware::handle();
+
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/controllers/FileController.php';
 

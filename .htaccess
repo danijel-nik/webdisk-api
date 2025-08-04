@@ -1,3 +1,14 @@
+# ---------------------------------------
+
+# ✅ Rewrite all requests to index.php
+
+# ---------------------------------------
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
+
 # -------------------------------------------------------
 
 # 🔐 SECURITY RULES
@@ -43,11 +54,11 @@ Order allow,deny
 Deny from all
 </FilesMatch>
 
-# 7. Protect against browser MIME-type sniffing
+# 7. Protect against browser MIME-type sniffing - Security headers
 
 Header set X-Content-Type-Options "nosniff"
 
-# 8. Prevent clickjacking
+# 8. Prevent clickjacking - Security headers
 
 Header always set X-Frame-Options "DENY"
 
