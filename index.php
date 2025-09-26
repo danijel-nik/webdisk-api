@@ -24,6 +24,12 @@ switch ("$method $endpoint") {
   case 'POST delete':
     $response = FileController::delete();
     break;
+  case 'POST create-folder':
+    $response = FileController::createFolder();
+    break;
+  case 'POST delete-folder':
+    $response = FileController::deleteFolder();
+    break;
   case 'GET ':
     $response = ['success' => true, 'status' => 200, 'message' => APP_NAME . ' v' . APP_VERSION];
     break;

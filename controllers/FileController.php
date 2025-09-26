@@ -59,4 +59,22 @@ class FileController
 
     return ['success' => true, 'status' => 200];
   }
+
+  public static function createFolder(): array
+  {
+    $path = $_POST['path'];
+    if (FileModel::createFolder($path)) {
+      return ['success' => true, 'status' => 200];
+    }
+    return ['success' => false, 'status' => 400, 'error' => 'Folder wasn\'t created. Please try later.'];
+  }
+
+  public static function deleteFolder(): array
+  {
+    $path = $_POST['path'];
+    if (FileModel::deleteFolder($path)) {
+      return ['success' => true, 'status' => 200];
+    }
+    return ['success' => false, 'status' => 400, 'error' => 'Folder wasn\'t created. Please try later.'];
+  }
 }
