@@ -77,4 +77,15 @@ class FileController
     }
     return ['success' => false, 'status' => 400, 'error' => 'Folder wasn\'t created. Please try later.'];
   }
+
+  public static function rename(): array
+  {
+    $oldPath = $_POST['old_path'];
+    $newPath = $_POST['new_path'];
+
+    if (FileModel::rename($oldPath, $newPath)) {
+      return ['success' => true, 'status' => 200];
+    }
+    return ['success' => false, 'status' => 400, 'error' => 'Folder of file wasn\'t renamed. Please try later.'];
+  }
 }

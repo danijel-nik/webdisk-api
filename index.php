@@ -24,6 +24,9 @@ switch ("$method $endpoint") {
   case 'POST delete':
     $response = FileController::delete();
     break;
+  case 'POST rename':
+    $response = FileController::rename();
+    break;
   case 'POST create-folder':
     $response = FileController::createFolder();
     break;
