@@ -30,6 +30,9 @@ switch ("$method $endpoint") {
   case 'POST create-folder':
     $response = FileController::createFolder();
     break;
+  case 'POST list-folder':
+    $response = FileController::listFolder();
+    break;
   case 'POST delete-folder':
     $response = FileController::deleteFolder();
     break;

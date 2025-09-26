@@ -73,7 +73,7 @@ class FileModel
   public static function createFolder($path = ''): bool
   {
     // Sanitize folder name: allow only letters, numbers, dashes, underscores
-    $path = preg_replace('/[^a-zA-Z0-9_\-\/]/', '', $path);
+    $path = preg_replace('/[^a-zA-Z0-9_@.\-\/]/', '', $path);
 
     if ($path === '') {
       return false;
@@ -180,5 +180,53 @@ class FileModel
     }
 
     return rename($old, $new);
+  }
+
+  /**
+   * Lists folder: files and subfolders in results
+   * @param string $path
+   * @return array{modified: string, name: bool|string, size: bool|int|null, type: string[]|bool}
+   */
+  public static function listFolder(string $path = ''): array|false
+  {
+    // 🛡️ Sanitize input path
+    $path = preg_replace('/[^a-zA-Z0-9_@.\-\/]/', '', $path);
+
+    $dir = rtrim(UPLOAD_DIR . '/' . $path, '/');
+
+    if (!is_dir($dir)) {
+      return false;
+    }
+
+    // 🛡️ Prevent directory traversal
+    $realBase = realpath(UPLOAD_DIR);
+    $realDir = realpath($dir);
+
+    if ($realBase === false || $realDir === false || strpos($realDir, $realBase) !== 0) {
+      return false;
+    }
+
+    $items = [];
+    $handle = opendir($dir);
+    if ($handle === false) {
+      return false;
+    }
+
+    while (($entry = readdir($handle)) !== false) {
+      if ($entry === '.' || $entry === '..') {
+        continue;
+      }
+
+      $fullPath = $dir . '/' . $entry;
+      $items[] = [
+        'name' => $entry,
+        'type' => is_dir($fullPath) ? 'folder' : 'file',
+        'size' => is_file($fullPath) ? filesize($fullPath) : null,
+        'modified' => date('Y-m-d H:i:s', filemtime($fullPath)),
+      ];
+    }
+    closedir($handle);
+
+    return $items;
   }
 }

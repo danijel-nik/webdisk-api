@@ -66,7 +66,7 @@ class FileController
     if (FileModel::createFolder($path)) {
       return ['success' => true, 'status' => 200];
     }
-    return ['success' => false, 'status' => 400, 'error' => 'Folder wasn\'t created. Please try later.'];
+    return ['success' => false, 'status' => 400, 'error' => 'Folder wasn\'t created. Please try again later.'];
   }
 
   public static function deleteFolder(): array
@@ -75,7 +75,7 @@ class FileController
     if (FileModel::deleteFolder($path)) {
       return ['success' => true, 'status' => 200];
     }
-    return ['success' => false, 'status' => 400, 'error' => 'Folder wasn\'t created. Please try later.'];
+    return ['success' => false, 'status' => 400, 'error' => 'Folder wasn\'t created. Please try again later.'];
   }
 
   public static function rename(): array
@@ -86,6 +86,16 @@ class FileController
     if (FileModel::rename($oldPath, $newPath)) {
       return ['success' => true, 'status' => 200];
     }
-    return ['success' => false, 'status' => 400, 'error' => 'Folder of file wasn\'t renamed. Please try later.'];
+    return ['success' => false, 'status' => 400, 'error' => 'Folder of file wasn\'t renamed. Please try again later.'];
+  }
+
+  public static function listFolder(): array
+  {
+    $path = $_POST['path'];
+    $result = FileModel::listFolder($path);
+    if ($result) {
+      return ['success' => true, 'status' => 200, 'data' => $result];
+    }
+    return ['success' => false, 'status' => 400, 'error' => 'You cannot list this directory at the moment. Please try again later.'];
   }
 }
