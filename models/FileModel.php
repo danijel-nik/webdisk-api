@@ -18,9 +18,7 @@ class FileModel
       // ✅ Extract safe extension
       $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
-      // ✅ Whitelist allowed extensions
-      $allowed = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'txt']; // adjust to your needs
-      if (!in_array($ext, $allowed, true)) {
+      if (!in_array($ext, ALLOWED_EXTENSIONS, true)) {
         return false;
       }
 

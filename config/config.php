@@ -15,3 +15,4 @@ define('UPLOAD_DIR', rtrim($_ENV['UPLOAD_DIR'], '/') . '/');
 define('ALLOWED_MIME_TYPES', explode(',', $_ENV['ALLOWED_MIME_TYPES']));
 define('MAX_FILE_SIZE', (int) $_ENV['MAX_FILE_SIZE']);
 define('API_KEY', $_ENV['API_KEY']);
+define('ALLOWED_EXTENSIONS', explode(',', $_ENV['ALLOWED_EXTENSIONS']));
