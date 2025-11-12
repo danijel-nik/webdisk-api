@@ -42,12 +42,12 @@ class FileModel
 
       // ✅ Prevent overwriting existing files → add (1), (2), ...
       $destination = $uploadDir . '/' . $filename;
-      $counter = 1;
-      while (file_exists($destination)) {
-        $filename = $baseName . " ($counter)." . $ext;
-        $destination = $uploadDir . '/' . $filename;
-        $counter++;
-      }
+      // $counter = 1;
+      // while (file_exists($destination)) {
+      //   $filename = $baseName . " ($counter)." . $ext;
+      //   $destination = $uploadDir . '/' . $filename;
+      //   $counter++;
+      // }
 
       return move_uploaded_file($file['tmp_name'], $destination) ? $filename : false;
     } catch (Exception $e) {
