@@ -24,7 +24,7 @@ class FileModel
 
       // ✅ Generate safe filename (random or sanitized original)
       $baseName = pathinfo($file['name'], PATHINFO_FILENAME);
-      $baseName = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $baseName); // safe chars only
+      $baseName = preg_replace('/[^a-zA-Z0-9_\-\(\)]/', '_', $baseName); // safe chars only
       if ($baseName === '') {
         $baseName = 'file';
       }
