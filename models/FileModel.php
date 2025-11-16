@@ -10,7 +10,7 @@ class FileModel
       }
 
       // ✅ Sanitize folder path
-      $path = preg_replace('/[^a-zA-Z0-9_@.\-\/]/', '', $path);
+      $path = preg_replace('/[^a-zA-Z0-9_@.\-\/ ]/', '', $path);
       if ($path === '') {
         return false;
       }
@@ -24,7 +24,7 @@ class FileModel
 
       // ✅ Generate safe filename (random or sanitized original)
       $baseName = pathinfo($file['name'], PATHINFO_FILENAME);
-      $baseName = preg_replace('/[^a-zA-Z0-9_\-\(\)]/', '_', $baseName); // safe chars only
+      $baseName = preg_replace('/[^a-zA-Z0-9_\-\(\) ]/', '_', $baseName); // safe chars only
       if ($baseName === '') {
         $baseName = 'file';
       }
@@ -71,7 +71,7 @@ class FileModel
   public static function createFolder($path = ''): bool
   {
     // Sanitize folder name: allow only letters, numbers, dashes, underscores
-    $path = preg_replace('/[^a-zA-Z0-9_@.\-\/]/', '', $path);
+    $path = preg_replace('/[^a-zA-Z0-9_@.\-\/ ]/', '', $path);
 
     if ($path === '') {
       return false;
@@ -188,7 +188,7 @@ class FileModel
   public static function listFolder(string $path = ''): array|false
   {
     // 🛡️ Sanitize input path
-    $path = preg_replace('/[^a-zA-Z0-9_@.\-\/]/', '', $path);
+    $path = preg_replace('/[^a-zA-Z0-9_@.\-\/ ]/', '', $path);
 
     $dir = rtrim(UPLOAD_DIR . '/' . $path, '/');
 
