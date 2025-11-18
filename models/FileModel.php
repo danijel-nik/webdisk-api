@@ -104,41 +104,63 @@ class FileModel
     return mkdir($newDir, 0755, true);
   }
 
-  public static function deleteFolder($path = ''): bool
+  public static function deleteFolder($path = ''): bool | string
   {
     if ($path === '') {
       return false;
     }
-    $dir = UPLOAD_DIR . $path;
-    if (!is_dir($dir)) {
+
+    $realBase = realpath(UPLOAD_DIR);
+    if ($realBase === false) {
       return false;
     }
 
-    $realBase = realpath(UPLOAD_DIR);
-    $realDir = realpath($dir);
+    $target = UPLOAD_DIR . $path;
+    $realTarget = realpath($target);
 
-    if ($realDir === false || strpos($realDir, $realBase) !== 0) {
+    // making sure that $realTarget is into $realBase
+    if ($realTarget === false || strpos($realTarget, $realBase) !== 0) {
       // Prevent directory traversal attack
       return false;
     }
 
     // Recursive delete - delete everything in directory first (files and subfolders)
-    $it = new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS);
+    $it = new RecursiveDirectoryIterator($realTarget, FilesystemIterator::SKIP_DOTS);
     $files = new RecursiveIteratorIterator(
       $it,
       RecursiveIteratorIterator::CHILD_FIRST
     );
 
     foreach ($files as $file) {
+      $filePath = $file->getPathname();
+      $realFilePath = realpath($filePath);
+      $checkPath = $realFilePath !== false ? $realFilePath : $filePath;
+
+      // security check: don't delete anything outside of root
+      if (strpos($checkPath, $realBase) !== 0) {
+        return false;
+      }
+
+      if ($file->isLink()) {
+        if (!@unlink($filePath)) {
+          return false;
+        }
+        continue;
+      }
+
       if ($file->isDir()) {
-        rmdir($file->getRealPath());
+        if (!@rmdir($filePath)) {
+          return false;
+        }
       } else {
-        unlink($file->getRealPath());
+        if (!@unlink($filePath)) {
+          return false;
+        }
       }
     }
 
     // finally remove the now-empty folder
-    return rmdir($dir);
+    return @rmdir($realTarget);
   }
 
   /**
